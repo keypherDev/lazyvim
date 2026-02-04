@@ -1,0 +1,1 @@
+/home/keypherdev/.config/omarchy/current/theme/neovim.lua
