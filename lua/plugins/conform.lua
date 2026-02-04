@@ -14,8 +14,7 @@ return {
         python = { "black" },
       })
 
-      opts.format_on_save = opts.format_on_save or {}
-      opts.format_on_save.timeout_ms = opts.format_on_save.timeout_ms or 500
+      opts.format_on_save = false
       opts.formatters = opts.formatters or {}
       opts.formatters.prettierd = opts.formatters.prettierd or {}
     end,
