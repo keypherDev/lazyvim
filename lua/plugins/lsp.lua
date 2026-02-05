@@ -4,6 +4,13 @@ local function append_unique(list, value)
   end
 end
 
+local diagnostic_signs = {
+  Error = "❌ ",
+  Warn = "⚠️ ",
+  Hint = "💡 ",
+  Info = "ℹ️ ",
+}
+
 local server_list = {
   tsserver = {},
   volar = {
@@ -41,6 +48,18 @@ return {
     "neovim/nvim-lspconfig",
     opts = function(_, opts)
       opts.servers = vim.tbl_deep_extend("force", opts.servers or {}, server_list)
+      opts.diagnostics = vim.tbl_deep_extend("force", {
+        virtual_text = {
+          spacing = 2,
+          prefix = "●",
+        },
+        severity_sort = true,
+      }, opts.diagnostics or {})
+
+      for severity, icon in pairs(diagnostic_signs) do
+        local hl = "DiagnosticSign" .. severity
+        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+      end
     end,
   },
   {
