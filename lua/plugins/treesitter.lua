@@ -2,7 +2,24 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     opts = function(_, opts)
-      opts.ensure_installed = opts.ensure_installed or {}
+      opts.ensure_installed = opts.ensure_installed
+        or {
+          "lua",
+          "javascript",
+          "query",
+          "typescript",
+          "php",
+          "go",
+          "python",
+          "html",
+          "css",
+          "json",
+          "bash",
+          "dockerfile",
+          "yaml",
+          "toml",
+          "markdown",
+        }
       local ensure = opts.ensure_installed
       if type(ensure) == "table" then
         for _, lang in ipairs({ "html", "css" }) do
