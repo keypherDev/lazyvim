@@ -13,6 +13,7 @@ return {
           "python",
           "html",
           "css",
+          "vue",
           "json",
           "bash",
           "dockerfile",
