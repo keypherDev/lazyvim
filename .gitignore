@@ -1,8 +1,29 @@
-tt.*
-.tests
-doc/tags
-debug
-.repro
-foo.*
+# Archivos locales o sensibles
+AGENTS.md
+lua/plugins/example.lua
+
+# Configuración de editor / IDE
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Archivos temporales
 *.log
-data
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Cachés de herramientas
+.cache/
+.local/
+session/
+
+# Dependencias externas
+node_modules/
+vendor/
+
+# Snippets y notas locales opcionales
+snippets/
+/tmp/
