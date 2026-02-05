@@ -4,6 +4,26 @@ local function append_unique(list, value)
   end
 end
 
+local function with_format_on_save(server_opts)
+  local original_on_attach = server_opts.on_attach
+  server_opts.on_attach = function(client, bufnr)
+    if original_on_attach then
+      original_on_attach(client, bufnr)
+    end
+
+    if client.supports_method("textDocument/formatting") then
+      local group = vim.api.nvim_create_augroup("lsp-format-" .. bufnr, { clear = true })
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        group = group,
+        buffer = bufnr,
+        callback = function()
+          vim.lsp.buf.format({ bufnr = bufnr, async = false })
+        end,
+      })
+    end
+  end
+end
+
 local diagnostic_signs = {
   Error = "❌ ",
   Warn = "⚠️ ",
@@ -14,7 +34,7 @@ local diagnostic_signs = {
 local server_list = {
   tsserver = {},
   volar = {
-    filetypes = { "vue", "typescript", "javascript", "javascriptreact", "typescriptreact" },
+    filetypes = { "vue" },
   },
   html = {},
   cssls = {},
@@ -26,7 +46,24 @@ local server_list = {
   gopls = {},
   sqlls = {},
   graphql = {},
+  eslint = {
+    filetypes = {
+      "javascript",
+      "javascriptreact",
+      "javascript.jsx",
+      "typescript",
+      "typescriptreact",
+      "vue",
+    },
+    settings = {
+      format = { enable = true },
+      workingDirectory = { mode = "auto" },
+    },
+  },
 }
+
+with_format_on_save(server_list.gopls)
+with_format_on_save(server_list.eslint)
 
 local mason_servers = {
   "typescript-language-server",
@@ -41,6 +78,7 @@ local mason_servers = {
   "gopls",
   "sqlls",
   "graphql-language-service-cli",
+  "eslint-lsp",
 }
 
 return {
@@ -63,7 +101,7 @@ return {
     end,
   },
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
       for _, pkg in ipairs(mason_servers) do
@@ -72,7 +110,7 @@ return {
     end,
   },
   {
-    "williamboman/mason-lspconfig.nvim",
+    "mason-org/mason-lspconfig.nvim",
     opts = function(_, opts)
       opts.ensure_installed = opts.ensure_installed or {}
       for server in pairs(server_list) do
