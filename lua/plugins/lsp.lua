@@ -24,6 +24,44 @@ local function with_format_on_save(server_opts)
   end
 end
 
+local function trim_sign_text(text)
+  if type(text) ~= "string" then
+    return ""
+  end
+  local trimmed = text:gsub("^%s*(.-)%s*$", "%1")
+  return trimmed
+end
+
+local function define_diagnostic_sign(severity, icon)
+  local hl = "DiagnosticSign" .. severity
+  local fallback = severity:sub(1, 1)
+  local text = trim_sign_text(icon)
+  if text == "" then
+    text = fallback
+  end
+
+  local ok, err = pcall(vim.fn.sign_define, hl, { text = text, texthl = hl, numhl = hl })
+  if ok then
+    return
+  end
+
+  local notify = vim.notify_once or vim.notify
+  if notify then
+    notify(
+      string.format(
+        "No se pudo aplicar el signo '%s' para %s. Se usará '%s'. Error: %s",
+        text,
+        hl,
+        fallback,
+        err
+      ),
+      vim.log.levels.WARN
+    )
+  end
+
+  vim.fn.sign_define(hl, { text = fallback, texthl = hl, numhl = hl })
+end
+
 local diagnostic_signs = {
   Error = "❌ ",
   Warn = "⚠️ ",
@@ -95,8 +133,7 @@ return {
       }, opts.diagnostics or {})
 
       for severity, icon in pairs(diagnostic_signs) do
-        local hl = "DiagnosticSign" .. severity
-        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+        define_diagnostic_sign(severity, icon)
       end
     end,
   },
