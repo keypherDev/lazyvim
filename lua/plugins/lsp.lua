@@ -48,13 +48,7 @@ local function define_diagnostic_sign(severity, icon)
   local notify = vim.notify_once or vim.notify
   if notify then
     notify(
-      string.format(
-        "No se pudo aplicar el signo '%s' para %s. Se usará '%s'. Error: %s",
-        text,
-        hl,
-        fallback,
-        err
-      ),
+      string.format("No se pudo aplicar el signo '%s' para %s. Se usará '%s'. Error: %s", text, hl, fallback, err),
       vim.log.levels.WARN
     )
   end
@@ -70,10 +64,6 @@ local diagnostic_signs = {
 }
 
 local server_list = {
-  tsserver = {},
-  volar = {
-    filetypes = { "vue" },
-  },
   html = {},
   cssls = {},
   tailwindcss = {},
@@ -83,7 +73,33 @@ local server_list = {
   pyright = {},
   gopls = {},
   sqlls = {},
-  graphql = {},
+  ts_ls = {
+    filetypes = {
+      "javascript",
+      "javascriptreact",
+      "javascript.jsx",
+      "typescript",
+      "typescriptreact",
+      "typescript.tsx",
+    },
+    -- Deshabilitar en archivos .vue para evitar conflictos
+    on_attach = function(client, bufnr)
+      if vim.bo[bufnr].filetype == "vue" then
+        client.stop()
+        return
+      end
+    end,
+  },
+  vue_ls = {
+    filetypes = { "vue" },
+    init_options = {
+      typescript = {
+        tsdk = vim.fn.expand(
+          "$HOME/.local/share/nvim/mason/packages/typescript-language-server/node_modules/typescript/lib"
+        ),
+      },
+    },
+  },
   eslint = {
     filetypes = {
       "javascript",
@@ -104,18 +120,16 @@ with_format_on_save(server_list.gopls)
 with_format_on_save(server_list.eslint)
 
 local mason_servers = {
-  "typescript-language-server",
   "vue-language-server",
+  "typescript-language-server",
   "html-lsp",
   "css-lsp",
-  "tailwindcss-language-server",
   "emmet-ls",
   "json-lsp",
   "intelephense",
   "pyright",
   "gopls",
   "sqlls",
-  "graphql-language-service-cli",
   "eslint-lsp",
 }
 
