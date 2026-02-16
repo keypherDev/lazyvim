@@ -5,4 +5,13 @@
 -- with `vim.api.nvim_create_autocmd`
 --
 -- Or remove existing autocmds by their group name (which is prefixed with `lazyvim_` for the defaults)
--- e.g. vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
+
+local prettierd_cleanup = vim.api.nvim_create_augroup("local_prettierd_cleanup", { clear = true })
+
+vim.api.nvim_create_autocmd("VimLeavePre", {
+  group = prettierd_cleanup,
+  callback = function()
+    -- Cierra los procesos prettierd que no tienen clientes activos
+    vim.fn.jobstart({ "pkill", "-f", "prettierd" }, { detach = true })
+  end,
+})

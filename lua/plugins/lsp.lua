@@ -81,12 +81,12 @@ local server_list = {
       "typescript",
       "typescriptreact",
       "typescript.tsx",
+      "vue",
     },
     -- Deshabilitar en archivos .vue para evitar conflictos
     on_attach = function(client, bufnr)
       if vim.bo[bufnr].filetype == "vue" then
-        client.stop()
-        return
+        client.server_capabilities.documentHighlightProvider = false
       end
     end,
   },
