@@ -1,6 +1,11 @@
 # Archivos locales o sensibles
 AGENTS.md
 lua/plugins/example.lua
+.env
+.env.*
+*.env
+.cursor/
+.cursorrules
 
 # Configuración de editor / IDE
 .idea/
@@ -14,6 +19,13 @@ Thumbs.db
 *.bak
 *.swp
 *.swo
+*.orig
+*~
+Session.vim
+.netrwhist
+nvim-data/
+checkhealth.log
+health.log
 
 # Cachés de herramientas
 .cache/
