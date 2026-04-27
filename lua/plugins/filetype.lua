@@ -1,6 +1,7 @@
 return {
   {
-    "vim/nvim",
+    "LazyVim/LazyVim",
+    lazy = false,
     init = function()
       vim.filetype.add({
         pattern = {
