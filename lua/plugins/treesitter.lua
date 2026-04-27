@@ -20,6 +20,7 @@ return {
           "yaml",
           "toml",
           "markdown",
+          "blade",
         }
       local ensure = opts.ensure_installed
       if type(ensure) == "table" then
