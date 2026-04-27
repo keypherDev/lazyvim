@@ -10,7 +10,8 @@ return {
         typescript = { "prettierd" },
         typescriptreact = { "prettierd" },
         vue = { "prettierd" },
-        php = { "phpcsfixer" },
+        php = { "pint" },
+        blade = { "pint" },
         python = { "black" },
       })
 
