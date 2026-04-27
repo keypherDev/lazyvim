@@ -181,68 +181,27 @@ return {
   -- ========================================================================
   -- COPILOT INTEGRATION WITH BLINK.CMP
   -- ========================================================================
-  -- Nota: blink.cpm soporta Copilot automáticamente a través de 'sources.completion.enabled_providers'
-  -- Ya no se necesita copilot-cmp
   {
     "saghen/blink.cmp",
     optional = true,
+    dependencies = {
+      { "giuxtaposition/blink-cmp-copilot" },
+    },
     opts = function(_, opts)
-      -- Asegurarse que Copilot esté habilitado como proveedor
-      if not opts.sources then
-        opts.sources = {}
+      opts.sources = opts.sources or {}
+      opts.sources.default = opts.sources.default or { "lsp", "path", "snippets", "buffer" }
+
+      if not vim.tbl_contains(opts.sources.default, "copilot") then
+        table.insert(opts.sources.default, "copilot")
       end
 
-      if not opts.sources.completion then
-        opts.sources.completion = {}
-      end
-
-      if not opts.sources.completion.enabled_providers then
-        opts.sources.completion.enabled_providers = {}
-      end
-
-      -- Agregar 'copilot' a los proveedores habilitados
-      local providers = opts.sources.completion.enabled_providers
-      if not vim.tbl_contains(providers, "copilot") then
-        table.insert(providers, "copilot")
-      end
-
-      -- Opcional: Configurar la prioridad de Copilot
-      if not opts.sources.completion.provider_priorities then
-        opts.sources.completion.provider_priorities = {}
-      end
-
-      -- Dar alta prioridad a Copilot
-      opts.sources.completion.provider_priorities.copilot = 100
-
-      -- Personalizar el formato de Copilot en el menú
-      if not opts.windows then
-        opts.windows = {}
-      end
-
-      if not opts.windows.autocomplete then
-        opts.windows.autocomplete = {}
-      end
-
-      -- Personalizar cómo se muestra Copilot
-      local orig_render = opts.windows.autocomplete.render
-      opts.windows.autocomplete.render = function(win)
-        if orig_render then
-          orig_render(win)
-        end
-
-        if not win or not win.items then
-          return
-        end
-
-        -- Personalizar items de Copilot
-        for _, item in ipairs(win.items) do
-          if item.provider_id == "copilot" then
-            item.kind_icon = "🤖"
-            item.kind_name = "Copilot"
-            item.label_icon = "🤖"
-          end
-        end
-      end
+      opts.sources.providers = opts.sources.providers or {}
+      opts.sources.providers.copilot = {
+        name = "Copilot",
+        module = "blink-cmp-copilot",
+        score_offset = 100,
+        async = true,
+      }
     end,
   },
 }
