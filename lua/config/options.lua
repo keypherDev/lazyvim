@@ -12,6 +12,7 @@ vim.opt.splitright = true -- Nuevas ventanas verticales se abren a la derecha
 vim.opt.wrap = false -- Desactiva el ajuste de línea automático
 vim.opt.signcolumn = "yes" -- Siempre muestra la columna de signos (diagnósticos, git, etc.)
 vim.opt.termguicolors = true -- Habilita colores de 24 bits en terminal
+vim.opt.colorcolumn = "80" -- Línea guía en columna 120 (máximo ancho de línea)
 
 -- ============================================================================
 -- INDENTACIÓN Y TABULACIÓN
@@ -40,6 +41,11 @@ vim.opt.ignorecase = true -- Búsquedas insensibles a mayúsculas/minúsculas
 vim.opt.smartcase = true -- Búsquedas sensibles si contienen mayúsculas
 vim.opt.hlsearch = true -- Resalta todas las coincidencias de búsqueda
 vim.opt.incsearch = true -- Búsqueda incremental mientras escribes
+
+-- ============================================================================
+-- FORMATEO DE TEXTO (gq con Conform)
+-- ============================================================================
+vim.o.formatexpr = "v:lua.require'conform'.formatexpr()" -- gq usa Conform
 
 -- ============================================================================
 -- CONFIGURACIÓN DE VENTANAS Y SPLITS
