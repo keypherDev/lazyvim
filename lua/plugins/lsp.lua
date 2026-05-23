@@ -4,26 +4,6 @@ local function append_unique(list, value)
   end
 end
 
-local function with_format_on_save(server_opts)
-  local original_on_attach = server_opts.on_attach
-  server_opts.on_attach = function(client, bufnr)
-    if original_on_attach then
-      original_on_attach(client, bufnr)
-    end
-
-    if client.supports_method("textDocument/formatting") then
-      local group = vim.api.nvim_create_augroup("lsp-format-" .. bufnr, { clear = true })
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        group = group,
-        buffer = bufnr,
-        callback = function()
-          vim.lsp.buf.format({ bufnr = bufnr, async = false })
-        end,
-      })
-    end
-  end
-end
-
 local function trim_sign_text(text)
   if type(text) ~= "string" then
     return ""
@@ -115,9 +95,6 @@ local server_list = {
     },
   },
 }
-
-with_format_on_save(server_list.gopls)
-with_format_on_save(server_list.eslint)
 
 local mason_servers = {
   "vue-language-server",

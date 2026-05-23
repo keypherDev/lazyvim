@@ -11,8 +11,9 @@ return {
         typescriptreact = { "prettierd" },
         vue = { "prettierd" },
         php = { "pint" },
-        blade = { "pint" },
+        blade = { "blade-formatter" },
         python = { "black" },
+        ["_"] = { "lsp" },
       })
 
       opts.format_on_save = false
