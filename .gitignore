@@ -1,6 +1,7 @@
 # Archivos locales o sensibles
 AGENTS.md
 lua/plugins/example.lua
+lua/config/local_dbs.lua
 .env
 .env.*
 *.env
