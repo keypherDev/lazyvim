@@ -9,14 +9,14 @@ return {
     dependencies = { "nvim-lua/plenary.nvim" },
     keys = {
       {
-        "[h",
+        "<A-h>",
         function()
           require("harpoon"):list():prev()
         end,
         desc = "Harpoon anterior",
       },
       {
-        "]h",
+        "<A-l>",
         function()
           require("harpoon"):list():next()
         end,
