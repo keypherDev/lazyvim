@@ -63,6 +63,6 @@ return {
       require("harpoon"):setup()
     end,
   },
-  -- Desactivar bufferline (se reemplaza con Harpoon)
-  { "akinsho/bufferline.nvim", enabled = false },
+  -- bufferline activo de nuevo; Harpoon se usa para navegación con Alt+h / Alt+l
+  -- { "akinsho/bufferline.nvim", enabled = false },
 }
